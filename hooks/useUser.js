@@ -12,6 +12,7 @@ export default function useUser() {
   const router = useRouter()
   useEffect(() => {
     onAuthStateChange(setUsuario)
+    console.log(usuario)
   }, [])
 
   useEffect(() => {
