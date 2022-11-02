@@ -7,6 +7,7 @@ import Link from 'next/link'
 import Head from 'next/head'
 import { getDownloadURL } from 'firebase/storage'
 import Avatar from 'components/Avatar'
+import AppLayout from 'components/AppLayout'
 
 const COMPOSE_STATES = {
   ERROR: -1,
@@ -94,51 +95,53 @@ export default function ComposeTweet() {
       <Head>
         <title>Crea un nuevo tweet</title>
       </Head>
-      <header className="h-12 border-b-2 border-gray-300 flex items-center">
-        <Link href="/home">
-          <a>
-            <span className="ml-3">volver</span>
-          </a>
-        </Link>
-      </header>
-      <div className="flex flex-col px-3">
-        <strong className="m-3">escribe un tweet</strong>
-        <form className="flex" onSubmit={handleSubmit}>
-          {usuario && <Avatar src={usuario.avatar} />}
+      <div>
+        <header className="h-12 border-b-2 border-gray-300 flex items-center">
+          <Link href="/home">
+            <a>
+              <span className="ml-3">volver</span>
+            </a>
+          </Link>
+        </header>
+        <div className="flex flex-col px-3">
+          <strong className="m-3">escribe un tweet</strong>
+          <form className="flex" onSubmit={handleSubmit}>
+            {usuario && <Avatar src={usuario.avatar} />}
 
-          <div className="w-full flex flex-col">
-            <textarea
-              onDragEnter={handlerDragEnter}
-              onDragLeave={handlerDragLeave}
-              onDrop={handlerDrop}
-              onChange={handleChange}
-              placeholder="qué está pasando?"
-              value={message}
-              className={`h-60 w-full resize-none p-2 ${
-                drag === DRAG_IMAGE_STATES.DRAG_OVER
-                  ? 'border-2 border-black border-dashed rounded-lg'
-                  : 'border-2 border-transparent rounded-lg'
-              }`}
-            ></textarea>
-            {imagenURL && (
-              <div className="relative">
-                <img
-                  className="w-full h-auto rounded-xl"
-                  src={imagenURL}
-                  alt="imagen a subir"
-                ></img>
-                <button
-                  onClick={() => setImagenURL(null)}
-                  className="absolute text-white w-7 h-7 top-3 right-3 bg-black/30 rounded-full "
-                >
-                  x
-                </button>
-              </div>
-            )}
+            <div className="w-full flex flex-col">
+              <textarea
+                onDragEnter={handlerDragEnter}
+                onDragLeave={handlerDragLeave}
+                onDrop={handlerDrop}
+                onChange={handleChange}
+                placeholder="qué está pasando?"
+                value={message}
+                className={`h-60 w-full resize-none p-2 ${
+                  drag === DRAG_IMAGE_STATES.DRAG_OVER
+                    ? 'border-2 border-black border-dashed rounded-lg'
+                    : 'border-2 border-transparent rounded-lg'
+                }`}
+              ></textarea>
+              {imagenURL && (
+                <div className="relative">
+                  <img
+                    className="w-full h-auto rounded-xl"
+                    src={imagenURL}
+                    alt="imagen a subir"
+                  ></img>
+                  <button
+                    onClick={() => setImagenURL(null)}
+                    className="absolute text-white w-7 h-7 top-3 right-3 bg-black/30 rounded-full "
+                  >
+                    x
+                  </button>
+                </div>
+              )}
 
-            <Button disabled={buttonDissabled}>Twittear</Button>
-          </div>
-        </form>
+              <Button disabled={buttonDissabled}>Twittear</Button>
+            </div>
+          </form>
+        </div>
       </div>
     </>
   )

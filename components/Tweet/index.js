@@ -2,6 +2,8 @@ import Avatar from 'components/Avatar'
 import useTimeAgo from 'hooks/useTimeAgo'
 import Like from 'icons/Like'
 import Retweet from 'icons/Retweet'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export default function Tweet({
   userName,
@@ -13,10 +15,19 @@ export default function Tweet({
   sharedCount,
   createdAt,
 }) {
+  const router = useRouter()
   const timeago = useTimeAgo(createdAt)
 
+  const handleClick = (e) => {
+    e.preventDefault()
+    router.push(`/status/${id}`)
+  }
   return (
-    <article className="w-full flex flex-col py-3 px-3 border-b" key={id}>
+    <article
+      onClick={handleClick}
+      className="w-full flex flex-col py-3 px-3 border-b"
+      key={id}
+    >
       <div className="flex w-full">
         <div className="min-w-fit">
           <Avatar src={avatar} alt={userName}></Avatar>
@@ -24,7 +35,11 @@ export default function Tweet({
         <section>
           <div className="flex">
             <strong>{userName}</strong>
-            <span className="text-gray-500 text-sm">. {timeago}</span>
+            <Link href={`/status/${id}`}>
+              <a>
+                <span className="text-gray-500 text-sm">. {timeago}</span>
+              </a>
+            </Link>
           </div>
           <p className="p-2">{content}</p>
           {{ img } && (

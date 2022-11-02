@@ -7,6 +7,7 @@ import {
   query,
   getDocs,
   orderBy,
+  onSnapshot,
 } from 'firebase/firestore'
 import {
   getAuth,
@@ -14,12 +15,7 @@ import {
   signInWithPopup,
   onAuthStateChanged,
 } from 'firebase/auth'
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  uploadBytesResumable,
-} from 'firebase/storage'
+import { getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBrywFaMv1R-v4v2gPF7LgGRFkdLGGoZMg',
@@ -82,7 +78,26 @@ export const addTweet = ({
   })
 }
 
-export const fetchLastTweets = () => {
+const mapNewTweets = (doc) => {
+  const data = doc.data()
+  const { createdAt } = data
+  const id = doc.id
+  return {
+    ...data,
+    createdAt: +createdAt.toDate(),
+    id,
+  }
+}
+
+export const listenRealTime = (callback) => {
+  const q = query(collection(db, 'tweets'), orderBy('createdAt', 'desc'))
+  return onSnapshot(q, ({ docs }) => {
+    const newTweets = docs.map((doc) => mapNewTweets(doc))
+    callback(newTweets)
+  })
+}
+
+/* export const fetchLastTweets = () => {
   return getDocs(
     query(collection(db, 'tweets'), orderBy('createdAt', 'desc'))
   ).then((snapshot) => {
@@ -99,7 +114,7 @@ export const fetchLastTweets = () => {
     })
   })
 }
-
+ */
 export const subirImagen = (archivo) => {
   const storageRef = ref(storage, `images/${archivo.name}`)
   const uploadTask = uploadBytesResumable(storageRef, archivo)
